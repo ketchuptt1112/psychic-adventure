@@ -1,125 +1,172 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>科技进化史</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Microsoft Yahei', sans-serif;
+            font-family: -apple-system, 'Microsoft Yahei', sans-serif;
             background: #f0f2f5;
             min-height: 100vh;
-            padding: 20px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .game-container {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 30px;
-            max-width: 800px;
-            width: 90%;
-            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 18px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        h1 {
+            color: #1d1d1f;
+            font-size: 1.35rem;
+            text-align: center;
+            margin: 8px 0 15px;
+            line-height: 1.3;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
-            margin: 20px 0;
+            height: 5px;
+            background: #e5e5e5;
+            border-radius: 3px;
+            margin: 0 0 18px;
+            position: relative;
+            overflow: hidden;
         }
 
         .progress {
             height: 100%;
             width: 0;
-            background: #1890ff;
-            border-radius: 4px;
-            transition: width 0.5s;
+            background: linear-gradient(90deg, #1890ff, #40a9ff);
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tech-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 10px 0;
         }
 
         .tech-item {
-            text-align: center;
-            padding: 15px;
+            padding: 12px;
             background: #f8f9fa;
             border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .tech-image {
             width: 100%;
-            height: 180px;
+            height: 160px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             margin: 10px 0;
+            border-radius: 6px;
+            background-color: #fff;
         }
 
         .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            gap: 8px;
         }
 
         .option-btn {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             background: white;
-            color: #333;
+            color: #2d2d2d;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: all 0.2s ease;
+            font-size: 15px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            touch-action: manipulation;
         }
 
+        .option-btn:hover,
         .option-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
+            background: #f8f9fa;
         }
 
         .option-btn.selected {
-            box-shadow: 0 0 0 2px rgba(24,144,255,0.5);
+            box-shadow: 0 0 0 2px rgba(24,144,255,0.3);
         }
 
         .option-btn.correct {
             background: #52c41a !important;
             border-color: #52c41a;
             color: white;
+            animation: pop 0.3s;
         }
 
         .option-btn.correct::after {
             content: "✓";
             margin-left: 8px;
-            animation: fadeInCheck 0.5s;
         }
 
         .option-btn.wrong {
             background: #ff4d4f !important;
             border-color: #ff4d4f;
             color: white;
+            animation: shake 0.4s;
         }
 
         .option-btn.wrong::after {
             content: "✕";
             margin-left: 8px;
-            animation: fadeInCheck 0.5s;
         }
 
-        @keyframes fadeInCheck {
-            from { opacity: 0; transform: translateX(-5px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        h1 {
-            color: #262626;
-            text-align: center;
-            margin-bottom: 20px;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            .game-container {
+                padding: 25px;
+                margin-top: 20px;
+            }
+            .tech-group {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .tech-image {
+                height: 180px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -133,7 +180,6 @@
     </div>
 
     <script>
-        // 修正后的关卡数据
         const levels = [
             { // 第1关：交通工具
                 old: {
@@ -250,11 +296,11 @@
 
         function createTechItem(techData, type) {
             const item = document.createElement('div');
-            item.className = `tech-item ${type}`;  // 关键修复：添加类型类名
+            item.className = `tech-item ${type}`;
 
             const img = document.createElement('div');
             img.className = 'tech-image';
-            img.style.backgroundImage = `url(${techData.image})`;
+            img.style.backgroundImage = `url('${techData.image}')`;
             
             const options = document.createElement('div');
             options.className = 'options-container';
@@ -275,14 +321,13 @@
         function checkAnswer(selected, correct, type) {
             const buttons = document.querySelectorAll(`.${type} .option-btn`);
             
-            // 第一步：立即显示选中状态
             buttons.forEach(btn => {
+                btn.style.transform = 'scale(1)';
                 if (btn.textContent === selected) {
                     btn.classList.add('selected');
                 }
             });
 
-            // 第二步：延迟显示对错状态
             setTimeout(() => {
                 buttons.forEach(btn => {
                     btn.disabled = true;
@@ -293,7 +338,7 @@
                         btn.classList.add('wrong');
                     }
                 });
-            }, 300);
+            }, 150);
 
             if (type === 'old') answeredOld = true;
             if (type === 'new') answeredNew = true;
@@ -305,12 +350,49 @@
                         answeredOld = answeredNew = false;
                         initGame();
                     } else {
-                        alert('恭喜通关！您已完成生活科技进化之旅！');
-                        currentLevel = 0;
-                        initGame();
+                        showResult();
                     }
-                }, 1500);
+                }, 1200);
             }
+        }
+
+        function showResult() {
+            const container = document.createElement('div');
+            container.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                padding: 25px;
+                border-radius: 12px;
+                text-align: center;
+                max-width: 300px;
+                width: 90%;
+            `;
+
+            content.innerHTML = `
+                <h2 style="color:#1890ff; margin-bottom:15px;">🎉 通关成功！</h2>
+                <p style="margin:10px 0; color:#666;">您已完成所有科技进化挑战！</p>
+                <button onclick="location.reload()" 
+                    style="background:#1890ff; color:white; border:none; padding:12px 30px; 
+                    border-radius:25px; margin-top:15px; font-size:16px; cursor:pointer;">
+                    再玩一次
+                </button>
+            `;
+
+            container.appendChild(content);
+            document.body.appendChild(container);
         }
 
         // 初始化游戏
